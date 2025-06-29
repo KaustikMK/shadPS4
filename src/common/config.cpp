@@ -857,7 +857,7 @@ void setDefaultValues() {
     gpuId = -1;
     compatibilityData = false;
     checkCompatibilityOnStartup = false;
-    system_menu_path = {};
+    system_menu_path.clear();
 }
 
 constexpr std::string_view GetDefaultKeyboardConfig() {
