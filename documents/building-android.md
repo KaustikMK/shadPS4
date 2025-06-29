@@ -7,7 +7,7 @@ and ARM64 (aarch64) devices.
 ## Prerequisites
 
 - Android Studio with the NDK component installed
-- CMake 3.24 or newer
+- CMake 3.22 or newer (the Android SDK ships with 3.22.1)
 
 ## Steps
 
