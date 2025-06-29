@@ -20,7 +20,10 @@ android {
     externalNativeBuild {
         cmake {
             path '../../CMakeLists.txt'
-            version '3.24'
+            // Use a CMake version provided by the Android SDK.
+            // 3.22.1 is the newest stable release available via sdkmanager
+            // and is compatible with NDK r26.
+            version '3.22.1'
         }
     }
     buildFeatures {
