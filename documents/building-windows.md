@@ -10,6 +10,8 @@ If you are building to contribute to the project, please omit `--depth 1` from t
 
 Note: **ARM64 is not supported!** As of writing, it will not build nor run. The instructions with respect to ARM64 are for developers only.
 
+shadPS4 targets **Windows 10 RS5** or newer. Earlier Windows versions are not supported.
+
 ## Option 1: Visual Studio 2022
 
 ### (Prerequisite) Download the Community edition from [**Visual Studio 2022**](https://visualstudio.microsoft.com/vs/)
