@@ -144,6 +144,19 @@ The following firmware modules are supported and must be placed in shadPS4's `sy
 > [!Caution]
 > The above modules are required to run the games properly and must be extracted from your PlayStation 4.
 
+## Installing firmware from `PS4UPDATE.PUP`
+
+shadPS4 ships with a helper script that can unpack a firmware update and
+place the relevant modules in the correct location. Provide the path to
+your `PS4UPDATE.PUP` file when running the script:
+
+```bash
+python3 scripts/install_ps4_firmware.py /path/to/PS4UPDATE.PUP
+```
+
+This will extract supported modules into the `sys_modules` directory. Once
+installed the System Menu button in the GUI will become functional.
+
 
 
 # Main team
