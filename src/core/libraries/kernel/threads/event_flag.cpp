@@ -111,11 +111,8 @@ public:
     void Set(u64 bits) {
         std::unique_lock lock{m_mutex};
 
-        while (m_status != Status::Set) {
-            m_mutex.unlock();
-            std::this_thread::sleep_for(std::chrono::microseconds(10));
-            m_mutex.lock();
-        }
+        // Wait until the event flag is available instead of spinning.
+        m_cond_var.wait(lock, [this] { return m_status == Status::Set; });
 
         m_bits |= bits;
         m_cond_var.notify_all();
@@ -123,11 +120,7 @@ public:
 
     void Clear(u64 bits) {
         std::unique_lock lock{m_mutex};
-        while (m_status != Status::Set) {
-            m_mutex.unlock();
-            std::this_thread::sleep_for(std::chrono::microseconds(10));
-            m_mutex.lock();
-        }
+        m_cond_var.wait(lock, [this] { return m_status == Status::Set; });
 
         m_bits &= bits;
     }
@@ -135,11 +128,7 @@ public:
     void Cancel(u64 setPattern, int* numWaitThreads) {
         std::unique_lock lock{m_mutex};
 
-        while (m_status != Status::Set) {
-            m_mutex.unlock();
-            std::this_thread::sleep_for(std::chrono::microseconds(10));
-            m_mutex.lock();
-        }
+        m_cond_var.wait(lock, [this] { return m_status == Status::Set; });
 
         if (numWaitThreads) {
             *numWaitThreads = m_waiting_threads;
@@ -150,13 +139,11 @@ public:
 
         m_cond_var.notify_all();
 
-        while (m_waiting_threads > 0) {
-            m_mutex.unlock();
-            std::this_thread::sleep_for(std::chrono::microseconds(10));
-            m_mutex.lock();
-        }
+        // Wait until all threads are released.
+        m_cond_var.wait(lock, [this] { return m_waiting_threads == 0; });
 
         m_status = Status::Set;
+        m_cond_var.notify_all();
     }
 
 private:
