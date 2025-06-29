@@ -51,6 +51,7 @@ public:
     QPushButton* keyboardButton;
     QPushButton* fullscreenButton;
     QPushButton* restartButton;
+    QPushButton* systemMenuButton;
 
     QWidget* sizeSliderContainer;
     QHBoxLayout* sizeSliderContainer_layout;
@@ -232,6 +233,10 @@ public:
         restartButton->setFlat(true);
         restartButton->setIcon(QIcon(":images/restart_game_icon.png"));
         restartButton->setIconSize(QSize(40, 40));
+        systemMenuButton = new QPushButton(centralWidget);
+        systemMenuButton->setFlat(true);
+        systemMenuButton->setIcon(QIcon(":images/utils_icon.png"));
+        systemMenuButton->setIconSize(QSize(40, 40));
 
         sizeSliderContainer = new QWidget(centralWidget);
         sizeSliderContainer->setObjectName("sizeSliderContainer");
