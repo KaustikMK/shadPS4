@@ -122,6 +122,9 @@ void removeGameInstallDir(const std::filesystem::path& dir);
 void setGameInstallDirEnabled(const std::filesystem::path& dir, bool enabled);
 void setAddonInstallDir(const std::filesystem::path& dir);
 
+void setSystemMenuPath(const std::filesystem::path& dir);
+std::filesystem::path getSystemMenuPath();
+
 const std::vector<std::filesystem::path> getGameInstallDirs();
 const std::vector<bool> getGameInstallDirsEnabled();
 std::filesystem::path getAddonInstallDir();

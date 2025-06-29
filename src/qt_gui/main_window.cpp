@@ -196,6 +196,7 @@ void MainWindow::AddUiWidgets() {
     ui->toolBar->addWidget(createButtonWithLabel(ui->pauseButton, tr("Pause"), showLabels));
     ui->toolBar->addWidget(createButtonWithLabel(ui->stopButton, tr("Stop"), showLabels));
     ui->toolBar->addWidget(createButtonWithLabel(ui->restartButton, tr("Restart"), showLabels));
+    ui->toolBar->addWidget(createButtonWithLabel(ui->systemMenuButton, tr("System Menu"), showLabels));
     ui->toolBar->addWidget(createSpacer(this));
     ui->toolBar->addWidget(createButtonWithLabel(ui->settingsButton, tr("Settings"), showLabels));
     ui->toolBar->addWidget(
@@ -481,6 +482,8 @@ void MainWindow::CreateConnects() {
         auto kbmWindow = new KBMSettings(m_game_info, this);
         kbmWindow->exec();
     });
+
+    connect(ui->systemMenuButton, &QPushButton::clicked, this, &MainWindow::BootSystemMenu);
 
 #ifdef ENABLE_UPDATER
     connect(ui->updaterAct, &QAction::triggered, this, [this]() {
@@ -970,6 +973,30 @@ void MainWindow::BootGame() {
     }
 }
 
+void MainWindow::BootSystemMenu() {
+    auto path = Config::getSystemMenuPath();
+    if (path.empty() || !std::filesystem::exists(path)) {
+        QFileDialog dialog;
+        dialog.setFileMode(QFileDialog::ExistingFile);
+        dialog.setNameFilter(tr("ELF files (*.bin *.elf *.oelf)"));
+        if (!dialog.exec()) {
+            return;
+        }
+        QStringList fileNames = dialog.selectedFiles();
+        if (fileNames.isEmpty()) {
+            return;
+        }
+        path = Common::FS::PathFromQString(fileNames[0]);
+        Config::setSystemMenuPath(path);
+    }
+    if (!std::filesystem::exists(path)) {
+        QMessageBox::critical(nullptr, tr("System Menu"),
+                              QString(tr("Eboot.bin file not found")));
+        return;
+    }
+    StartEmulator(path);
+}
+
 void MainWindow::InstallDirectory() {
     GameInstallDialog dlg;
     dlg.exec();
@@ -1091,6 +1118,7 @@ void MainWindow::SetUiIcons(bool isWhite) {
     ui->stopButton->setIcon(RecolorIcon(ui->stopButton->icon(), isWhite));
     ui->refreshButton->setIcon(RecolorIcon(ui->refreshButton->icon(), isWhite));
     ui->restartButton->setIcon(RecolorIcon(ui->restartButton->icon(), isWhite));
+    ui->systemMenuButton->setIcon(RecolorIcon(ui->systemMenuButton->icon(), isWhite));
     ui->settingsButton->setIcon(RecolorIcon(ui->settingsButton->icon(), isWhite));
     ui->fullscreenButton->setIcon(RecolorIcon(ui->fullscreenButton->icon(), isWhite));
     ui->controllerButton->setIcon(RecolorIcon(ui->controllerButton->icon(), isWhite));

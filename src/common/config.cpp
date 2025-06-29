@@ -81,6 +81,7 @@ static std::vector<GameInstallDir> settings_install_dirs = {};
 std::vector<bool> install_dirs_enabled = {};
 std::filesystem::path settings_addon_install_dir = {};
 std::filesystem::path save_data_path = {};
+std::filesystem::path system_menu_path = {};
 static bool isFullscreen = false;
 static std::string fullscreenMode = "Windowed";
 static bool isHDRAllowed = false;
@@ -135,6 +136,14 @@ std::filesystem::path GetSaveDataPath() {
         return Common::FS::GetUserPath(Common::FS::PathType::UserDir) / "savedata";
     }
     return save_data_path;
+}
+
+std::filesystem::path getSystemMenuPath() {
+    return system_menu_path;
+}
+
+void setSystemMenuPath(const std::filesystem::path& path) {
+    system_menu_path = path;
 }
 
 void setLoadGameSizeEnabled(bool enable) {
@@ -650,6 +659,8 @@ void load(const std::filesystem::path& path) {
         save_data_path = toml::find_fs_path_or(gui, "saveDataPath", {});
 
         settings_addon_install_dir = toml::find_fs_path_or(gui, "addonInstallDir", {});
+
+        system_menu_path = toml::find_fs_path_or(gui, "systemMenuPath", {});
     }
 
     if (data.contains("Settings")) {
@@ -796,6 +807,8 @@ void save(const std::filesystem::path& path) {
 
     data["GUI"]["addonInstallDir"] =
         std::string{fmt::UTF(settings_addon_install_dir.u8string()).data};
+    data["GUI"]["systemMenuPath"] =
+        std::string{fmt::UTF(system_menu_path.u8string()).data};
     data["Settings"]["consoleLanguage"] = m_language;
 
     // Sorting of TOML sections
@@ -844,6 +857,7 @@ void setDefaultValues() {
     gpuId = -1;
     compatibilityData = false;
     checkCompatibilityOnStartup = false;
+    system_menu_path = {};
 }
 
 constexpr std::string_view GetDefaultKeyboardConfig() {
