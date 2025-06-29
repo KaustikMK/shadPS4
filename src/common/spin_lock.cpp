@@ -34,8 +34,16 @@ void ThreadPause() {
 namespace Common {
 
 void SpinLock::lock() {
+    constexpr std::size_t kSpinLimit = 128;
+    std::size_t spin_count = 0;
     while (lck.test_and_set(std::memory_order_acquire)) {
-        ThreadPause();
+        if (spin_count < kSpinLimit) {
+            ++spin_count;
+            ThreadPause();
+        } else {
+            spin_count = 0;
+            std::this_thread::yield();
+        }
     }
 }
 

@@ -4,6 +4,8 @@
 #pragma once
 
 #include <atomic>
+#include <cstddef>
+#include <thread>
 
 namespace Common {
 
