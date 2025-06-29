@@ -6,7 +6,7 @@
 #include <QComboBox>
 #include <QDialog>
 #include <QPlainTextEdit>
-#include "string"
+#include <string>
 
 class EditorDialog : public QDialog {
 Q_OBJECT // Necessary for using Qt's meta-object system (signals/slots)
