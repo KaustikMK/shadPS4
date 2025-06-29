@@ -1,11 +1,11 @@
 // SPDX-FileCopyrightText: Copyright 2024 shadPS4 Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-#include "functional"
-#include "iostream"
-#include "string"
-#include "system_error"
-#include "unordered_map"
+#include <functional>
+#include <iostream>
+#include <string>
+#include <system_error>
+#include <unordered_map>
 
 #include <fmt/core.h>
 #include "common/config.h"
