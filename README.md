@@ -70,6 +70,10 @@ Check the build instructions for [**Linux**](https://github.com/shadps4-emu/shad
 
 Check the build instructions for [**macOS**](https://github.com/shadps4-emu/shadPS4/blob/main/documents/building-macos.md).
 
+## Android
+
+Check the build instructions for [**Android**](https://github.com/shadps4-emu/shadPS4/blob/main/documents/building-android.md).
+
 > [!IMPORTANT]
 > macOS users need at least macOS 15.4 to run shadPS4. Due to GPU issues there are currently heavy bugs on Intel Macs.
 

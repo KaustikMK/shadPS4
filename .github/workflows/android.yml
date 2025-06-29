@@ -1,0 +1,20 @@
+name: Android Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Generate Gradle wrapper
+        run: gradle -p android wrapper --gradle-version 8.2
+      - name: Build APK
+        run: ./gradlew -p android assembleDebug --no-daemon

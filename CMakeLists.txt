@@ -35,11 +35,19 @@ option(ENABLE_QT_GUI "Enable the Qt GUI. If not selected then the emulator uses 
 option(ENABLE_DISCORD_RPC "Enable the Discord RPC integration" ON)
 option(ENABLE_UPDATER "Enables the options to updater" ON)
 
+if(ANDROID)
+    set(ENABLE_QT_GUI OFF CACHE BOOL "" FORCE)
+    set(ENABLE_DISCORD_RPC OFF CACHE BOOL "" FORCE)
+    set(ENABLE_UPDATER OFF CACHE BOOL "" FORCE)
+endif()
+
 # First, determine whether to use CMAKE_OSX_ARCHITECTURES or CMAKE_SYSTEM_PROCESSOR.
 if (APPLE AND CMAKE_OSX_ARCHITECTURES)
     set(BASE_ARCHITECTURE "${CMAKE_OSX_ARCHITECTURES}")
 elseif (CMAKE_SYSTEM_PROCESSOR)
     set(BASE_ARCHITECTURE "${CMAKE_SYSTEM_PROCESSOR}")
+elseif(ANDROID)
+    set(BASE_ARCHITECTURE "aarch64")
 else()
     set(BASE_ARCHITECTURE "${CMAKE_HOST_SYSTEM_PROCESSOR}")
 endif()
@@ -1068,7 +1076,19 @@ set(QT_GUI src/qt_gui/about_dialog.cpp
 )
 endif()
 
-if (ENABLE_QT_GUI)
+if (ANDROID)
+    add_library(shadps4 SHARED
+        ${AUDIO_CORE}
+        ${IMGUI}
+        ${INPUT}
+        ${COMMON}
+        ${CORE}
+        ${SHADER_RECOMPILER}
+        ${VIDEO_CORE}
+        ${EMULATOR}
+        src/android/jni_interface.cpp
+    )
+elseif (ENABLE_QT_GUI)
     qt_add_executable(shadps4
         ${AUDIO_CORE}
         ${IMGUI}
